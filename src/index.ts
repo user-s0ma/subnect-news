@@ -1,5 +1,5 @@
 interface Env {
-  GNEWS_API_KEY: string;
+  NEWS_API_KEY: string;
   PUBLIC_APP_URL: string;
   APP_BOT_COOKIE: string;
 }
@@ -9,7 +9,7 @@ export default {
     try {
       // GNews APIからニュースを取得
       const gnewsApiResponse = await fetch(
-        `https://gnews.io/api/v4/top-headlines?country=jp&apikey=${env.GNEWS_API_KEY}`
+        `https://gnews.io/api/v4/top-headlines?country=jp&apikey=${env.NEWS_API_KEY}`
       );
       if (!gnewsApiResponse.ok) {
         throw new Error("Failed to fetch news from GNews API");
