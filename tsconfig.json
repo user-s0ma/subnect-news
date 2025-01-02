@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+    "target": "es2021",
+		"lib": ["es2021"],
+    "allowJs": true,
+    "noEmit": true,
+    "module": "es2022",
+    "moduleResolution": "bundler",
+		"forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+		"skipLibCheck": true,
+    "types": [
+			"@cloudflare/workers-types/2023-07-01"
+		]
+	},
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}
