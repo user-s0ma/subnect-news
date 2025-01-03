@@ -1,7 +1,7 @@
 interface Env {
   NEWS_API_KEY: string;
-  PUBLIC_APP_URL: string;
   APP_BOT_COOKIE: string;
+  PUBLIC_APP_URL: string;
 }
 
 export default {
@@ -34,16 +34,19 @@ export default {
       let imageAssetId = null;
       if (topArticle.image) {
         const imageResponse = await fetch(topArticle.image);
-
+    
         if (imageResponse.ok) {
-          const imageBuffer = await imageResponse.arrayBuffer();
+          const imageBlob = await imageResponse.blob();
+          const formData = new FormData();
+          formData.append("file", imageBlob, "news-image.jpg");
+          formData.append("alt", topArticle.title);
 
-          const uploadResponse = await fetch(`${env.PUBLIC_APP_URL}/api/assets/upload`, {
+          const uploadResponse = await fetch(`${env.PUBLIC_APP_URL}/api/assets/upload/public`, {
             method: "POST",
             headers: {
               "Cookie": env.APP_BOT_COOKIE,
             },
-            body: imageBuffer,
+            body: formData,
           });
 
           if (!uploadResponse.ok) {
