@@ -63,7 +63,7 @@ export default {
           "Cookie": env.APP_BOT_COOKIE,
         },
         body: JSON.stringify({
-          text: `${topArticle.title}\n${topArticle.description}`,
+          text: `${topArticle.title}\n${topArticle.description}`.slice(0, 197) + "...",
           assets: imageAssetId ? [imageAssetId] : [],
         }),
       });
