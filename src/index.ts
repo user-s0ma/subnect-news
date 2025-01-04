@@ -7,27 +7,29 @@ interface Env {
 export default {
   async scheduled(event: ScheduledEvent, env: Env, ctx: EventContext<Env, any, any>) {
     try {
+      const now = new Date();
+      const twentyMinutesAgo = new Date(now.getTime() - 20 * 60 * 1000);
+
       // GNews APIからニュースを取得
+      const twentyMinutesAgoISO = twentyMinutesAgo.toISOString();
       const gnewsApiResponse = await fetch(
-        `https://gnews.io/api/v4/top-headlines?country=jp&apikey=${env.NEWS_API_KEY}`
+        `https://gnews.io/api/v4/top-headlines?country=jp&from=${twentyMinutesAgoISO}&apikey=${env.NEWS_API_KEY}`
       );
       if (!gnewsApiResponse.ok) {
         throw new Error("Failed to fetch news from GNews API");
-      }
+      };
 
       const newsData = (await gnewsApiResponse.json()) as any;
       const topArticle = newsData.articles
         .filter(article => article.source.name === "ロイター (Reuters Japan)")[0];
       if (!topArticle) {
-        return;
+        throw new Error("topArticle not found.");
       };
 
       // 一番上のニュースが20分以内かをチェック
-      const now = new Date();
-      const twentyMinutesAgo = new Date(now.getTime() - 20 * 60 * 1000);
       const publishedAt = new Date(topArticle.publishedAt);
       if (publishedAt <= twentyMinutesAgo) {
-        return;
+        throw new Error("twenty minutes article not found.");
       };
 
       // 画像をアップロード
@@ -50,13 +52,13 @@ export default {
           });
 
           if (!uploadResponse.ok) {
-            throw new Error("Failed to upload image");
-          }
+            throw new Error("Failed to upload image.");
+          };
 
           const uploadData = (await uploadResponse.json()) as any;
           imageAssetId = uploadData.assetId;
-        }
-      }
+        };
+      };
 
       // メイン投稿を作成
       const mainPostResponse = await fetch(`${env.PUBLIC_APP_URL}/api/posts`, {
@@ -72,8 +74,8 @@ export default {
       });
 
       if (!mainPostResponse.ok) {
-        throw new Error("Failed to post main content to SNS");
-      }
+        throw new Error("Failed to post main content to SNS.");
+      };
 
       const mainPostData = (await mainPostResponse.json()) as { postId: string };
       const mainPostId = mainPostData.postId;
@@ -92,10 +94,10 @@ export default {
       });
 
       if (!linkPostResponse.ok) {
-        throw new Error("Failed to post link as reply to SNS");
-      }
+        throw new Error("Failed to post link as reply to SNS.");
+      };
 
-      return new Response("Top article posted successfully", { status: 201 });
+      return new Response("Top article posted successfully.", { status: 201 });
     } catch (error) {
       console.error(error);
       return new Response("Internal server error.", { status: 500 });
