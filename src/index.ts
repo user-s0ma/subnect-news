@@ -11,7 +11,7 @@ export default {
       const twentyMinutesAgo = new Date(now.getTime() - 20 * 60 * 1000);
 
       // GNews APIからニュースを取得
-      const twentyMinutesAgoISO = twentyMinutesAgo.toISOString();
+      const twentyMinutesAgoISO = twentyMinutesAgo.toISOString().split(".")[0] + "Z";;
       const gnewsApiResponse = await fetch(
         `https://gnews.io/api/v4/top-headlines?country=jp&from=${twentyMinutesAgoISO}&apikey=${env.NEWS_API_KEY}`
       );
