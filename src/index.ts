@@ -8,10 +8,10 @@ export default {
   async scheduled(event: ScheduledEvent, env: Env, ctx: EventContext<Env, any, any>) {
     try {
       const now = new Date();
-      const twentyMinutesAgo = new Date(now.getTime() - 20 * 60 * 1000);
+      const twentyMinutesAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
       // GNews APIからニュースを取得
-      const twentyMinutesAgoISO = twentyMinutesAgo.toISOString().split(".")[0] + "Z";;
+      const twentyMinutesAgoISO = twentyMinutesAgo.toISOString().split(".")[0] + "Z";
       const gnewsApiResponse = await fetch(
         `https://gnews.io/api/v4/top-headlines?country=jp&from=${twentyMinutesAgoISO}&apikey=${env.NEWS_API_KEY}`
       );
