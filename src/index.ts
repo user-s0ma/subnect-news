@@ -20,8 +20,7 @@ export default {
       };
 
       const newsData = (await gnewsApiResponse.json()) as any;
-      const topArticle = newsData.articles
-        .filter(article => article.source.name === "ロイター (Reuters Japan)")[0];
+      const topArticle = newsData.articles[0];
       if (!topArticle) {
         throw new Error("topArticle not found.");
       };
