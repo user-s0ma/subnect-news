@@ -23,7 +23,7 @@ export default {
       const newsData = (await gnewsApiResponse.json()) as any;
       const topArticle = newsData.articles[0];
       if (!topArticle) {
-        throw new Error("TopArticle not found.");
+        throw new Error("Top article not found.");
       };
 
       // 一番上のニュースが20分以内かをチェック
