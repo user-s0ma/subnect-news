@@ -4,7 +4,7 @@ compatibility_date = "2024-08-21"
 compatibility_flags = ["nodejs_compat"]
 
 [triggers]
-crons = ["*/60 * * * *"]
+crons = ["0 * * * *"]
 
 [observability.logs]
 enabled = true
