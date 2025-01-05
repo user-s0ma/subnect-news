@@ -28,7 +28,7 @@ export default {
       // 一番上のニュースが20分以内かをチェック
       const publishedAt = new Date(topArticle.publishedAt);
       if (publishedAt <= OneHoursAgo) {
-        throw new Error("twenty minutes article not found.");
+        throw new Error("one hours article not found.");
       };
 
       // 画像をアップロード
