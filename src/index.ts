@@ -4,6 +4,7 @@ interface Env {
   PUBLIC_APP_URL: string;
 }
 
+//http://localhost:8787/__scheduled?cron=*+*+*+*+*
 export default {
   async scheduled(event: ScheduledEvent, env: Env, ctx: EventContext<Env, any, any>) {
     try {
@@ -11,9 +12,9 @@ export default {
       const OneHoursAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
       // GNews APIからニュースを取得
-      const twentyMinutesAgoISO = OneHoursAgo.toISOString().split(".")[0] + "Z";
+      const OneHoursAgoISO = OneHoursAgo.toISOString().split(".")[0] + "Z";
       const gnewsApiResponse = await fetch(
-        `https://gnews.io/api/v4/top-headlines?country=jp&from=${twentyMinutesAgoISO}&apikey=${env.NEWS_API_KEY}`
+        `https://gnews.io/api/v4/top-headlines?country=jp&from=${OneHoursAgoISO}&apikey=${env.NEWS_API_KEY}`
       );
       if (!gnewsApiResponse.ok) {
         throw new Error("Failed to fetch news from GNews API");
@@ -22,20 +23,20 @@ export default {
       const newsData = (await gnewsApiResponse.json()) as any;
       const topArticle = newsData.articles[0];
       if (!topArticle) {
-        throw new Error("topArticle not found.");
+        throw new Error("TopArticle not found.");
       };
 
       // 一番上のニュースが20分以内かをチェック
       const publishedAt = new Date(topArticle.publishedAt);
       if (publishedAt <= OneHoursAgo) {
-        throw new Error("one hours article not found.");
+        throw new Error("One hours article not found.");
       };
 
       // 画像をアップロード
       let imageAssetId = null;
       if (topArticle.image) {
         const imageResponse = await fetch(topArticle.image);
-    
+
         if (imageResponse.ok) {
           const imageBlob = await imageResponse.blob();
           const formData = new FormData();
