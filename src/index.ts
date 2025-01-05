@@ -8,10 +8,10 @@ export default {
   async scheduled(event: ScheduledEvent, env: Env, ctx: EventContext<Env, any, any>) {
     try {
       const now = new Date();
-      const twentyMinutesAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      const OneHoursAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
       // GNews APIからニュースを取得
-      const twentyMinutesAgoISO = twentyMinutesAgo.toISOString().split(".")[0] + "Z";
+      const twentyMinutesAgoISO = OneHoursAgo.toISOString().split(".")[0] + "Z";
       const gnewsApiResponse = await fetch(
         `https://gnews.io/api/v4/top-headlines?country=jp&from=${twentyMinutesAgoISO}&apikey=${env.NEWS_API_KEY}`
       );
@@ -27,7 +27,7 @@ export default {
 
       // 一番上のニュースが20分以内かをチェック
       const publishedAt = new Date(topArticle.publishedAt);
-      if (publishedAt <= twentyMinutesAgo) {
+      if (publishedAt <= OneHoursAgo) {
         throw new Error("twenty minutes article not found.");
       };
 
