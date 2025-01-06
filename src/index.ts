@@ -35,7 +35,16 @@ export default {
       // 画像をアップロード
       let imageAssetId = null;
       if (topArticle.image) {
-        const imageResponse = await fetch(topArticle.image);
+        const imageResponse = await fetch(topArticle.image, {
+          cf: {
+            image: {
+              width: 750,
+              height: 750,
+              fit: "scale-down",
+              format: "jpeg",
+            },
+          },
+        });
 
         if (imageResponse.ok) {
           const imageBlob = await imageResponse.blob();
