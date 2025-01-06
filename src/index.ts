@@ -52,7 +52,8 @@ export default {
           });
 
           if (!uploadResponse.ok) {
-            throw new Error("Failed to upload image.");
+            const error = (await uploadResponse.json()) as any;
+            throw new Error(`Failed to upload image.: ${error}}`);
           };
 
           const uploadData = (await uploadResponse.json()) as any;
@@ -74,7 +75,8 @@ export default {
       });
 
       if (!mainPostResponse.ok) {
-        throw new Error("Failed to post main content to SNS.");
+        const error = (await mainPostResponse.json()) as any;
+        throw new Error(`Failed to post main content.: ${error}}`);
       };
 
       const mainPostData = (await mainPostResponse.json()) as { postId: string };
@@ -94,7 +96,8 @@ export default {
       });
 
       if (!linkPostResponse.ok) {
-        throw new Error("Failed to post link as reply to SNS.");
+        const error = (await linkPostResponse.json()) as any;
+        throw new Error(`Failed to post link as reply.: ${error}}`);
       };
 
       return new Response("Top article posted successfully.", { status: 201 });
