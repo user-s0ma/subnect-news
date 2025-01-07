@@ -62,7 +62,7 @@ export default {
 
           if (!uploadResponse.ok) {
             const error = (await uploadResponse.json()) as any;
-            throw new Error(`Failed to upload image.: ${error}}`);
+            throw new Error(`Failed to upload image.: ${JSON.stringify(error)}}`);
           };
 
           const uploadData = (await uploadResponse.json()) as any;
@@ -85,7 +85,7 @@ export default {
 
       if (!mainPostResponse.ok) {
         const error = (await mainPostResponse.json()) as any;
-        throw new Error(`Failed to post main content.: ${error}}`);
+        throw new Error(`Failed to post main content.: ${JSON.stringify(error)}}`);
       };
 
       const mainPostData = (await mainPostResponse.json()) as { postId: string };
@@ -106,7 +106,7 @@ export default {
 
       if (!linkPostResponse.ok) {
         const error = (await linkPostResponse.json()) as any;
-        throw new Error(`Failed to post link as reply.: ${error}}`);
+        throw new Error(`Failed to post link as reply.: ${JSON.stringify(error)}}`);
       };
 
       return new Response("Top article posted successfully.", { status: 201 });
